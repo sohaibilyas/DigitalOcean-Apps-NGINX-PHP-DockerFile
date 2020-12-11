@@ -1,1 +1,1 @@
-# nginx php mysql docker for digital ocean apps
+# nginx php docker for digital ocean apps
