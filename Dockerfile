@@ -1,8 +1,8 @@
 # docker build 
 FROM php:7.4-fpm
+
 RUN apt-get update -y \ 
     && apt-get install -y nginx
-
 
 COPY /app/frontend /var/www
 COPY /app/backend /var/app/backend
