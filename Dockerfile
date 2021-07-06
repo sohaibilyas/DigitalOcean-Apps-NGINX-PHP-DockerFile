@@ -2,7 +2,10 @@
 FROM php:8.0.8-fpm
 
 RUN apt-get update -y \ 
-    && apt-get install -y nginx
+    && apt-get install -y nginx wget
+    
+RUN wget https://github.com/planetscale/cli/releases/download/v0.52.0/pscale_0.52.0_linux_amd64.deb \
+    && dpkg -i pscale_0.52.0_linux_amd64.deb
 
 COPY /app/frontend /var/www
 COPY /app/backend /var/app/backend
