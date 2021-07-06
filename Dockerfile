@@ -1,5 +1,5 @@
 # docker build 
-FROM php:latest
+FROM php:8.0.8-fpm
 
 RUN apt-get update -y \ 
     && apt-get install -y nginx
