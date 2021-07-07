@@ -1,9 +1,9 @@
-FROM php:8.0-fpm
+FROM php:8.0.8-fpm
 
 RUN apt-get update -y \ 
     && apt-get install -y nginx
 
-COPY /app/frontend /var/www/html
+COPY /app/frontend /var/www/
 COPY /app/backend /var/app/backend
 
 COPY /nginx/conf.d/site.conf /etc/nginx/conf.d/site.conf 
@@ -16,7 +16,7 @@ RUN sed -i -e 's/\r$//' /var/app/entrypoint.sh
 # Switch to use a non-root user from here on
 USER nobody
 
-WORKDIR /var/www/html
+WORKDIR /var/www
 
 EXPOSE 8080
 
