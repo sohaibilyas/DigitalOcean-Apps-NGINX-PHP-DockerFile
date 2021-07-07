@@ -6,7 +6,7 @@ RUN apt update && apt upgrade -y
 
 RUN apt install -y lsb-release apt-transport-https ca-certificates wget
 
-RUN wget -O /etc/apt/trusted.gpg.d/php.gpg
+RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
 
 RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
 
