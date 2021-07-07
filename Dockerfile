@@ -5,6 +5,7 @@ RUN apt-get update -y \
     && apt-get install -y nginx
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+COPY --from=planetscale/pscale:latest /usr/bin/pscale /usr/local/bin/pscale
 
 COPY /app/frontend /var/www
 
