@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:8.0-fpm
 
 RUN apt-get update -y \ 
     && apt-get install -y nginx
@@ -13,18 +13,11 @@ COPY entrypoint.sh /var/app/entrypoint.sh
 RUN chmod -R 777 /var/app/entrypoint.sh
 RUN sed -i -e 's/\r$//' /var/app/entrypoint.sh
 
-
-# Make sure files/folders needed by the processes are accessable when they run under the nobody user
-RUN chown -R nobody.nobody /var/www/html && \
-  chown -R nobody.nobody /run && \
-  chown -R nobody.nobody /var/lib/nginx && \
-  chown -R nobody.nobody /var/log/nginx
-
 # Switch to use a non-root user from here on
 USER nobody
 
-WORKDIR /var/www
+WORKDIR /var/www/html
 
-EXPOSE 80
+EXPOSE 8080
 
 ENTRYPOINT ["sh", "/var/app/entrypoint.sh"]
