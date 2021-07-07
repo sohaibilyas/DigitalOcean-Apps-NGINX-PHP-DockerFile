@@ -16,6 +16,6 @@ RUN sed -i -e 's/\r$//' /var/app/entrypoint.sh
 
 WORKDIR /var/www
 
-EXPOSE 8080
+EXPOSE 80
 
 ENTRYPOINT ["sh", "/var/app/entrypoint.sh"]
