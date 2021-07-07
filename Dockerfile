@@ -1,55 +1,18 @@
-FROM debian:latest
-LABEL Maintainer="Tim de Pater <code@trafex.nl>"
-LABEL Description="Lightweight container with Nginx 1.20 & PHP 8.0 based on Alpine Linux."
+FROM php:7.4-fpm
 
-RUN apt update && apt upgrade -y
+RUN apt-get update -y \ 
+    && apt-get install -y nginx
 
-RUN apt install -y lsb-release apt-transport-https ca-certificates wget
+COPY /app/frontend /var/www/html
+COPY /app/backend /var/app/backend
 
-RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+COPY /nginx/conf.d/site.conf /etc/nginx/conf.d/site.conf 
+COPY /nginx/conf.d/site.conf /etc/nginx/sites-enabled/default
+COPY entrypoint.sh /var/app/entrypoint.sh
 
-RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
+RUN chmod -R 777 /var/app/entrypoint.sh
+RUN sed -i -e 's/\r$//' /var/app/entrypoint.sh
 
-RUN apt update
-
-# Install packages and remove default server definition
-RUN apt install \
-  curl \
-  nginx \
-  php8 \
-  php8-ctype \
-  php8-curl \
-  php8-dom \
-  php8-fpm \
-  php8-gd \
-  php8-intl \
-  php8-json \
-  php8-mbstring \
-  php8-mysqli \
-  php8-opcache \
-  php8-openssl \
-  php8-phar \
-  php8-session \
-  php8-xml \
-  php8-xmlreader \
-  php8-zlib \
-  supervisor
-
-# Create symlink so programs depending on `php` still function
-RUN ln -s /usr/bin/php8 /usr/bin/php
-
-# Configure nginx
-COPY config/nginx.conf /etc/nginx/nginx.conf
-
-# Configure PHP-FPM
-COPY config/fpm-pool.conf /etc/php8/php-fpm.d/www.conf
-COPY config/php.ini /etc/php8/conf.d/custom.ini
-
-# Configure supervisord
-COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# Setup document root
-RUN mkdir -p /var/www/html
 
 # Make sure files/folders needed by the processes are accessable when they run under the nobody user
 RUN chown -R nobody.nobody /var/www/html && \
@@ -60,14 +23,8 @@ RUN chown -R nobody.nobody /var/www/html && \
 # Switch to use a non-root user from here on
 USER nobody
 
-# Add application
-WORKDIR /var/www/html
-COPY --chown=nobody /app/frontend /var/www/html/
+WORKDIR /var/www
 
-# Expose the port nginx is reachable on
-EXPOSE 8080
+EXPOSE 80
 
-# Let supervisord start nginx & php-fpm
-#CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
-
-#HEALTHCHECK --timeout=10s CMD curl --silent --fail http://127.0.0.1:8080/fpm-ping
+ENTRYPOINT ["sh", "/var/app/entrypoint.sh"]
