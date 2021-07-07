@@ -10,6 +10,8 @@ RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
 
 RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
 
+RUN apt update && apt upgrade -y
+
 # Install packages and remove default server definition
 RUN apt install \
   curl \
