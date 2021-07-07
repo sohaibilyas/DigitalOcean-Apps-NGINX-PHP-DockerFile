@@ -16,7 +16,7 @@ COPY entrypoint.sh /var/app/entrypoint.sh
 RUN chmod -R 777 /var/app/entrypoint.sh
 RUN sed -i -e 's/\r$//' /var/app/entrypoint.sh
 
-USER www-data
+#USER www-data
 
 WORKDIR /var/www
 
