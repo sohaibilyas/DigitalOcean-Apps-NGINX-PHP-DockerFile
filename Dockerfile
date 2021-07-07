@@ -2,6 +2,14 @@ FROM debian:latest
 LABEL Maintainer="Tim de Pater <code@trafex.nl>"
 LABEL Description="Lightweight container with Nginx 1.20 & PHP 8.0 based on Alpine Linux."
 
+RUN apt update && apt upgrade -y
+
+RUN apt install -y lsb-release apt-transport-https ca-certificates wget
+
+RUN wget -O /etc/apt/trusted.gpg.d/php.gpg
+
+RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
+
 # Install packages and remove default server definition
 RUN apt install \
   curl \
