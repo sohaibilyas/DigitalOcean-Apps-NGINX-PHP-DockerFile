@@ -1,5 +1,5 @@
 # docker build 
-FROM php:7.4-fpm
+FROM php:8.0-fpm
 
 RUN apt-get update -y \ 
     && apt-get install -y nginx
@@ -18,4 +18,4 @@ WORKDIR /var/www
 
 EXPOSE 80
 
-ENTRYPOINT ["sh", "/var/app/entrypoint.sh"]
+#ENTRYPOINT ["sh", "/var/app/entrypoint.sh"]
