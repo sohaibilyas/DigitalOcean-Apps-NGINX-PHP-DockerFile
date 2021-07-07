@@ -1,9 +1,9 @@
-FROM alpine:3.14
+FROM debian:latest
 LABEL Maintainer="Tim de Pater <code@trafex.nl>"
 LABEL Description="Lightweight container with Nginx 1.20 & PHP 8.0 based on Alpine Linux."
 
 # Install packages and remove default server definition
-RUN apk --no-cache add \
+RUN apt install \
   curl \
   nginx \
   php8 \
@@ -48,7 +48,7 @@ RUN chown -R nobody.nobody /var/www/html && \
   chown -R nobody.nobody /var/log/nginx
 
 # Switch to use a non-root user from here on
-USER root
+USER nobody
 
 # Add application
 WORKDIR /var/www/html
